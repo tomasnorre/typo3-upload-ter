@@ -6,7 +6,7 @@ echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
 
 echo "prepare-release: $COMPOSER_PREPARE_RELEASE"
-if [ -z "$COMPOSER_PREPARE_RELEASE" ]
+if [ -z "$COMPOSER_PREPARE_RELEASE" ] || [ "null" -eq $COMPOSER_PREPARE_RELEASE ]
 then
   echo "You can add a prepare-release to your composer.json to make your zip smaller before uploading, see README.md"
 else
