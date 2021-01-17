@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 TAG='0.0.1'
-echo -e "Preparing upload of release $TAG to TER\n";
+echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
