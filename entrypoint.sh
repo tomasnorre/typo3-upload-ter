@@ -4,6 +4,8 @@ echo -e "Preparing upload of release $1 to TER\n";
 
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
+
+echo "prepare-release: $COMPOSER_PREPARE_RELEASE"
 if [ -z "$COMPOSER_PREPARE_RELEASE" ]
 then
   echo "You can add a prepare-release to your composer.json to make your zip smaller before uploading, see README.md"
@@ -13,13 +15,10 @@ fi
 
 EXTKEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"')
 
-if [ -z "$COMPOSER_PREPARE_RELEASE" ]
+if [ -z "$EXTKEY" ]
 then
-  echo "You can add a prepare-release to your composer.json to make your zip smaller before uploading, see README.md"
-else
-  composer prepare-release
+  echo "You have to set your extensionkey in composer.json, this will soon be mandatory in all TYPO3 Extensions., see README.md"
 fi
-
 
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
