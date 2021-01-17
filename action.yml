@@ -1,5 +1,17 @@
 name: 'TYPO3 Ter Uploader'
 description: 'GitHub Action that helps you upload your Extensions to TER'
+inputs:
+  username: # id of input
+    description: 'Your TYPO3 Username - Use github.secrets'
+    required: true
+    default: ''
+  password: # id of input
+    description: 'Your TYPO3 Password - Use github.secrets'
+    required: true
+    default: ''
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.username }}
+    - ${{ inputs.password }}
