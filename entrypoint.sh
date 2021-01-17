@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-echo -e "Preparing upload of release $1 to TER\n";
+TAG='0.0.1'
+echo -e "Preparing upload of release $TAG to TER\n";
 
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
@@ -26,5 +27,5 @@ echo -e "Username: $1"
 echo -e "Password: $2"
 echo -e "TagMessage: $TAG_MESSAGE"
 
-#$HOME/.composer/vendor/helhum/ter-client/ter-client upload $1. -u "${{ secrets.TYPO3_ORG_USERNAME }}" -p "${{ secrets.TYPO3_ORG_PASSWORD }}" -m "$TAG_MESSAGE"
+#$HOME/.composer/vendor/helhum/ter-client/ter-client upload $EXTKEY. -u "$1" -p "$2" -m "$TAG_MESSAGE"
 
