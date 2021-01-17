@@ -1,0 +1,24 @@
+name: "Release"
+
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  release:
+    name: "Release"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: "Create release"
+        uses: "actions/create-release@v1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.TOMASNORRE_BOT_TOKEN }}"
+        with:
+          draft: false
+          prerelease: false
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
