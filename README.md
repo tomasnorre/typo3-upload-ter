@@ -19,7 +19,8 @@ GitHub Action that helps you upload your Extensions to TER.
 ```yaml 
     uses: tomasnorre/typo3-upload-ter@v1
     with:
-        extensionkey: 'my_extension'
+        extkey: 'my_extension'
+        tag: ${GITHUB_REF#refs/tags/}
         username: ${{ secrets.TYPO3_ORG_USERNAME }}
         password: ${{ secrets.TYPO3_ORG_PASSWORD }}
 ```
