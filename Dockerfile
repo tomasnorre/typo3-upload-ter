@@ -9,7 +9,7 @@ COPY --from=bash /usr/local/bin/bash /usr/bin/bash
 COPY entrypoint.sh /entrypoint.sh
 
 RUN apk update && apk upgrade && \
-    apk add bash git  && rm -rf /var/cache/apk/*
+    apk add bash git jq && rm -rf /var/cache/apk/*
 
 RUN composer global require helhum/ter-client
 
