@@ -22,8 +22,8 @@ fi
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
 echo -e "Extkey: $EXTKEY"
-echo -e "Username: $USERNAME"
-echo -e "Password: $PASSWORD"
+echo -e "Username: $1"
+echo -e "Password: $2"
 echo -e "TagMessage: $TAG_MESSAGE"
 
 #$HOME/.composer/vendor/helhum/ter-client/ter-client upload $1. -u "${{ secrets.TYPO3_ORG_USERNAME }}" -p "${{ secrets.TYPO3_ORG_PASSWORD }}" -m "$TAG_MESSAGE"
