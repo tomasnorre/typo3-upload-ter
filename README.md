@@ -1,5 +1,5 @@
 # typo3-upload-ter GitHub Action
-GitHub Action that helps you upload your Extensions to TER.
+GitHub Action that helps you upload your Extensions to [TER](https://extensions.typo3.org).
 
 ## Example usage
 
