@@ -11,6 +11,4 @@ COPY entrypoint.sh /entrypoint.sh
 RUN apk update && apk upgrade && \
     apk add bash git jq && rm -rf /var/cache/apk/*
 
-RUN composer global require helhum/ter-client
-
 ENTRYPOINT ["/entrypoint.sh"]

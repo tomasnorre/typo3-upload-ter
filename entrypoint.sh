@@ -2,6 +2,9 @@
 
 echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
+echo -e "Install helhum/ter-client"
+composer global require helhum/ter-client
+
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
 
@@ -12,7 +15,7 @@ else
   echo "You can add a prepare-release to your composer.json to make your zip smaller before uploading, see README.md"
 fi
 
-# Fetch extensionkey from composer.json
+# Fetch extension-key from composer.json
 EXTKEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"')
 
 if [ -z "$EXTKEY" ]
