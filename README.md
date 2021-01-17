@@ -1,8 +1,6 @@
 # typo3-upload-ter GitHub Action
 GitHub Action that helps you upload your Extensions to TER.
 
-## !!! This is still work in progress.
-
 ## Example usage
 
 ```yaml
@@ -20,7 +18,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v1
-      - uses: tomasnorre/typo3-upload-ter@v1
+      - uses: tomasnorre/typo3-upload-ter@v1.0.3
         with:
           username: ${{ secrets.TYPO3_ORG_USERNAME }}
           password: ${{ secrets.TYPO3_ORG_PASSWORD }}
