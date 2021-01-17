@@ -6,11 +6,24 @@ GitHub Action that helps you upload your Extensions to TER.
 ## Example usage
 
 ```yaml
-    uses: tomasnorre/typo3-upload-ter@v1
-    with:
-      username: ${{ secrets.TYPO3_ORG_USERNAME }}
-      password: ${{ secrets.TYPO3_ORG_PASSWORD }}
+name: TERUpload
 
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  TERUpload:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v1
+      - uses: tomasnorre/typo3-upload-ter@init
+        with:
+          username: ${{ secrets.TYPO3_ORG_USERNAME }}
+          password: ${{ secrets.TYPO3_ORG_PASSWORD }}
 ```
 
 ### Requirement
@@ -36,12 +49,14 @@ This can be helpful to ensure that some files are removed before uploading.
 
 **Example:**
 ```json
-"prepare-release": [
-    "@extension-create-libs",
-    "rm -rf .devbox",
-    "rm -rf Tests/",
-    "rm .gitignore",
-    "rm .scrutinizer.yml",
-    "rm disabled.travis.yml"
-],
+"scripts": {
+    "prepare-release": [
+        "@extension-create-libs",
+        "rm -rf .devbox",
+        "rm -rf Tests/",
+        "rm .gitignore",
+        "rm .scrutinizer.yml",
+        "rm disabled.travis.yml"
+    ]
+}
 ```
