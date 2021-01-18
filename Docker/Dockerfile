@@ -6,7 +6,7 @@ FROM php:7.4-alpine
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=bash /usr/local/bin/bash /usr/bin/bash
 
-COPY ../entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 
 RUN apk update && apk upgrade && \
     apk add bash git jq libxml2-dev libzip-dev icu-dev curl && \

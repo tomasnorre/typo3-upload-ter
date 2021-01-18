@@ -14,7 +14,9 @@ jobs:
         run: docker login --username=${{ secrets.DOCKER_HUB_USERNAME }} --password=${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t tomasnorre/typo3teruploader:latest -f Docker/Dockerfile
+        run: |
+          cp entrypoint.sh Docker/entrypoint.sh
+          docker build -t tomasnorre/typo3teruploader:latest Docker/
 
       - name: Docker Push
         run: docker push tomasnorre/typo3teruploader:latest
