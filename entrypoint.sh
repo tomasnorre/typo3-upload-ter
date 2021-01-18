@@ -28,5 +28,8 @@ fi
 
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
-$HOME/.composer/vendor/bin/tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V $TYPO3_EXTENSION_KEY
+ls -l
+pwd
+
+#$HOME/.composer/vendor/bin/tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V
 
