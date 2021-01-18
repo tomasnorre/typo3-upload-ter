@@ -4,9 +4,6 @@ echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
 TAG_WITHOUT_V=$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//');
 
-echo -e "Install typo3/tailor"
-composer global require typo3/tailor --prefer-dist --no-progress --no-suggest
-
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
 
@@ -28,7 +25,7 @@ fi
 
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
-$HOME/.composer/vendor/bin/tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V --path=/github/workspace/
+tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V --path=/github/workspace/
 
 ls -l
 pwd

@@ -16,4 +16,9 @@ RUN docker-php-ext-install soap && \
     docker-php-ext-install zip && \
     docker-php-ext-configure intl && docker-php-ext-install intl
 
+RUN echo -e "Install typo3/tailor" && \
+    composer global require typo3/tailor --prefer-dist --no-progress --no-suggest
+
+RUN ln -nfs /root/.composer/vendor/typo3/tailor/bin/tailor /usr/bin/tailor
+
 ENTRYPOINT ["/entrypoint.sh"]
