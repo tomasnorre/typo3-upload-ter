@@ -30,3 +30,6 @@ TAG_MESSAGE=$(git log -1 --pretty=%B)
 
 $HOME/.composer/vendor/bin/tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V --path=/github/workspace/
 
+ls -l
+pwd
+
