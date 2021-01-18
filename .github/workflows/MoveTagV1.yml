@@ -1,0 +1,21 @@
+name: "Move Tag v1"
+
+on:
+  push:
+    tags:
+      - "v1*"
+
+jobs:
+  MoveTag:
+    name: "Move Tag V1"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Move v1 Tag
+        uses: richardsimko/update-tag@v1
+        env:
+          GITHUB_TOKEN: "${{ secrets.TOMASNORRE_BOT_TOKEN }}"
+        with:
+          tag_name: v1
