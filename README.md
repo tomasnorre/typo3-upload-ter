@@ -18,10 +18,9 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v1
-      - uses: tomasnorre/typo3-upload-ter@v1
+      - uses: tomasnorre/typo3-upload-ter@v2
         with:
-          username: ${{ secrets.TYPO3_ORG_USERNAME }}
-          password: ${{ secrets.TYPO3_ORG_PASSWORD }}
+          api-token: ${{ secrets.TYPO3_API_TOKEN }}
 ```
 
 ### Requirement

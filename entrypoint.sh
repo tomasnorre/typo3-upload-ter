@@ -2,8 +2,10 @@
 
 echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
-echo -e "Install helhum/ter-client"
-composer global require helhum/ter-client
+TAG_WITHOUT_V=$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//');
+
+echo -e "Install typo3/tailor"
+composer global require typo3/tailor --prefer-dist --no-progress --no-suggest
 
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
@@ -16,14 +18,15 @@ else
 fi
 
 # Fetch extension-key from composer.json
-EXTKEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"')
+TYPO3_EXTENSION_KEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"')
+TYPO3_API_TOKEN=$1
 
-if [ -z "$EXTKEY" ]
+if [ -z "TYPO3_EXTENSION_KEY" ]
 then
   echo "You have to set your extensionkey in composer.json, this will soon be mandatory in all TYPO3 Extensions., see README.md"
 fi
 
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
-$HOME/.composer/vendor/helhum/ter-client/ter-client upload $EXTKEY . -u "$1" -p "$2" -m "$TAG_MESSAGE"
+$HOME/.composer/vendor/bin/tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V
 
