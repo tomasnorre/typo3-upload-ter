@@ -16,15 +16,7 @@ fi
 
 # Fetch extension-key from composer.json
 export TYPO3_EXTENSION_KEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"')
-export TYPO3_API_TOKEN=$1
-
-echo "Length: PARAM1"
-expr length $1
-
-echo "Length: API_TOKEN"
-expr length $TYPO3_API_TOKEN
-
-
+#export TYPO3_API_TOKEN=$1
 
 if [ -z "TYPO3_EXTENSION_KEY" ]
 then
@@ -33,7 +25,7 @@ fi
 
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
-tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V --path=/github/workspace/
+TYPO3_API_TOKEN="$1" tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V
 
 ls -l
 pwd
