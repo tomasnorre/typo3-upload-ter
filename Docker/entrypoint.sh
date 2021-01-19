@@ -18,6 +18,14 @@ fi
 export TYPO3_EXTENSION_KEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"')
 export TYPO3_API_TOKEN=$1
 
+echo "Length: PARAM1"
+expr length $1
+
+echo "Length: API_TOKEN"
+expr length $TYPO3_API_TOKEN
+
+
+
 if [ -z "TYPO3_EXTENSION_KEY" ]
 then
   echo "You have to set your extensionkey in composer.json, this will soon be mandatory in all TYPO3 Extensions., see README.md"
