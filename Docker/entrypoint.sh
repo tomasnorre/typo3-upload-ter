@@ -25,4 +25,4 @@ then
   echo "You have to set your extensionkey in composer.json, this will soon be mandatory in all TYPO3 Extensions., see README.md"
 fi
 
-tailor ter:publish --comment="$TAG_MESSAGE" $TAG_WITHOUT_V $TYPO3_EXTENSION_KEY
+tailor ter:publish --comment="$TAG_MESSAGE" $TAG_WITHOUT_V
