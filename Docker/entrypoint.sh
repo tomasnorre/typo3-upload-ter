@@ -2,7 +2,9 @@
 
 echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
+# Prepare Tag information
 TAG_WITHOUT_V=$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//');
+TAG_MESSAGE=$(git log -1 --pretty=%B)
 
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
@@ -16,18 +18,11 @@ fi
 
 # Fetch extension-key from composer.json
 export TYPO3_EXTENSION_KEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"' | tr -d '"')
-#export TYPO3_API_TOKEN=$1
+export TYPO3_API_TOKEN=$1
 
 if [ -z "$TYPO3_EXTENSION_KEY" ]
 then
   echo "You have to set your extensionkey in composer.json, this will soon be mandatory in all TYPO3 Extensions., see README.md"
 fi
 
-TAG_MESSAGE=$(git log -1 --pretty=%B)
-
-export TYPO3_API_TOKEN=$1
-
 tailor ter:publish --comment="$TAG_MESSAGE" $TAG_WITHOUT_V $TYPO3_EXTENSION_KEY
-
-echo "command: ter:publish --comment='$TAG_MESSAGE' $TAG_WITHOUT_V $TYPO3_EXTENSION_KEY"
-
