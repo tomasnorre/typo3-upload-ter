@@ -25,7 +25,7 @@ fi
 
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
-TYPO3_API_TOKEN=$1 tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V
+TYPO3_API_TOKEN=$1 tailor ter:publish --comment "$TAG_MESSAGE" $TAG_WITHOUT_V --artefact="https://github.com/tomasnorre/tnm_gha_demo/archive/$TAG_WITHOUT_V.zip"
 
 ls -l
 pwd
