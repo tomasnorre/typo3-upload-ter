@@ -27,8 +27,14 @@ TAG_MESSAGE=$(git log -1 --pretty=%B)
 
 export TYPO3_API_TOKEN=$1
 
-echo date
+
+
+echo
+
+
 
 tailor ter:update $TYPO3_EXTENSION_KEY --tags=demo,github
 tailor ter:publish --comment="$TAG_MESSAGE" $TAG_WITHOUT_V $TYPO3_EXTENSION_KEY
+
+echo "command: ter:publish --comment='$TAG_MESSAGE' $TAG_WITHOUT_V $TYPO3_EXTENSION_KEY"
 
