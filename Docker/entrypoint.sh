@@ -25,8 +25,9 @@ fi
 
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
-echo "TYPO3_API_TOKEN=$1" > .env
+export TYPO3_API_TOKEN=$1
 
-#echo "command: TYPO3_API_TOKEN=$1 tailor ter:publish --comment='$TAG_MESSAGE' $TAG_WITHOUT_V"
+echo date
+
 tailor ter:publish --comment="$TAG_MESSAGE" $TAG_WITHOUT_V
 
