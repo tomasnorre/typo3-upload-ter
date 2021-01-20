@@ -29,8 +29,10 @@ export TYPO3_API_TOKEN=$1
 
 
 
-echo
+date
 
+echo $TYPO3_EXTENSION_KEY
+echo $TYPO3_EXTENSION_KEY | tr -d '"'
 
 
 tailor ter:update $TYPO3_EXTENSION_KEY --tags=demo,github
