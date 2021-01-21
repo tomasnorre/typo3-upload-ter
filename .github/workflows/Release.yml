@@ -22,3 +22,10 @@ jobs:
           prerelease: false
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+
+      - name: Move v2 Tag
+        uses: richardsimko/update-tag@v1
+        env:
+          GITHUB_TOKEN: "${{ secrets.TOMASNORRE_BOT_TOKEN }}"
+        with:
+          tag_name: v2
