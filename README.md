@@ -25,7 +25,7 @@ jobs:
 
 ### Requirement
 
-You have to set your extensionkey in `composer.json`, this will soon be mandatory in all TYPO3 Extensions.
+You have to set your extension-key in `composer.json`, this will soon be mandatory in all TYPO3 Extensions.
 
 https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ExtensionArchitecture/ComposerJson/Index.html#extra
 
@@ -37,6 +37,10 @@ https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ExtensionArchitect
     }
 },
 ```
+
+### Information
+
+The commit message will be you commit message of your `tag`, both `X.Y.Z` and `vX.Y.Z`-formatted tags are accepted.
 
 ### Recommendation
 
