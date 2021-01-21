@@ -12,10 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        run: echo "currently disabled due endless loop, retag manually"
 
-      - name: Move v2 Tag
-        uses: richardsimko/update-tag@v1
-        env:
-          GITHUB_TOKEN: "${{ secrets.TOMASNORRE_BOT_TOKEN }}"
-        with:
-          tag_name: v2
+      #- name: Move v2 Tag
+      #  uses: richardsimko/update-tag@v1
+      #  env:
+      #    GITHUB_TOKEN: "${{ secrets.TOMASNORRE_BOT_TOKEN }}"
+      #  with:
+      #   tag_name: v2
