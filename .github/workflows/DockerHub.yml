@@ -1,6 +1,9 @@
 name: "Update Docker Images"
 
-on: [ push, pull_request ]
+on:
+  push:
+    tags:
+      - "**"
 
 jobs:
   MoveTag:
