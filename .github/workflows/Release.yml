@@ -30,9 +30,6 @@ jobs:
           tag_name: v2
 
       # Make New Release to Docker Hub
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Docker Login
         run: docker login --username=${{ secrets.DOCKER_HUB_USERNAME }} --password=${{ secrets.DOCKER_HUB_PASSWORD }}
 
