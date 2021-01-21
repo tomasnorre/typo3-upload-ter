@@ -17,10 +17,10 @@ else
 fi
 
 # Fetch extension-key from composer.json
-export TYPO3_EXTENSION_KEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"' | tr -d '"')
+export EXTENSION_KEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"' | tr -d '"')
 export TYPO3_API_TOKEN=$1
 
-if [ -z "$TYPO3_EXTENSION_KEY" ]
+if [ -z "$EXTENSION_KEY" ]
 then
   echo "You have to set your extension-key in composer.json, this will soon be mandatory in all TYPO3 Extensions., see README.md"
 fi
