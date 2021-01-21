@@ -4,17 +4,12 @@ branding:
   icon: upload
   color: orange
 inputs:
-  username: # id of input
-    description: 'Your TYPO3 Username - Use github.secrets'
-    required: true
-    default: ''
-  password: # id of input
-    description: 'Your TYPO3 Password - Use github.secrets'
+  api-token: # id of input
+    description: 'Your TYPO3 API Token - Use github.secrets'
     required: true
     default: ''
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.username }}
-    - ${{ inputs.password }}
+    - ${{ inputs.api-token }}
