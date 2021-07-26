@@ -17,7 +17,7 @@ else
 fi
 
 # Fetch extension-key from composer.json
-export EXTENSION_KEY=$(cat composer.json | jq '.extra."typo3/cms"."extension-key"' | tr -d '"')
+export EXTENSION_KEY=$(cat composer.json | jq -r '.extra."typo3/cms"."extension-key" // empty')
 export TYPO3_API_TOKEN=$1
 
 if [ -z "$EXTENSION_KEY" ]
