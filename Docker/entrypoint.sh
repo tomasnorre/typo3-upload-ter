@@ -7,9 +7,9 @@ TAG_WITHOUT_V=$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//');
 TAG_MESSAGE=$(git log -1 --pretty=%B)
 
 echo -e "Preparing Release"
-COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release"')
+COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release" // empty')
 
-if [ -z "$COMPOSER_PREPARE_RELEASE" ] || [ -n "$COMPOSER_PREPARE_RELEASE" ]
+if [ -n "$COMPOSER_PREPARE_RELEASE" ]
 then
   composer prepare-release
 else
