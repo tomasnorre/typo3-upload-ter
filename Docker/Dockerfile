@@ -1,6 +1,6 @@
 FROM composer:2
 FROM bash:5
-FROM php:7.4-alpine
+FROM php:8.3-alpine
 
 # copy from the images into the PHP Image
 COPY --from=composer /usr/bin/composer /usr/bin/composer
