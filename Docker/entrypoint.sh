@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+echo -e "Preparing git configuration (safe.directory)\n";
+
+git config --global --add safe.directory $PWD
+
 echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
 # Prepare Tag information
