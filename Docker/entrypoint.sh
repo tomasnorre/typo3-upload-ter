@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# Check if an argument is provided (e.g., 8.3)
+if [[ -z "$2" ]]; then
+  echo "Keeping default: PHP 8.3"
+  ln -sf /usr/bin/php83 /usr/local/bin/php
+else
+  PHP=$(echo "$2" | tr -d '.')
+  ln -sf /usr/bin/php"$PHP" /usr/local/bin/php
+fi
+
 echo -e "Preparing git configuration (safe.directory)\n";
 
 git config --global --add safe.directory $PWD

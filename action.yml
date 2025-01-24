@@ -4,12 +4,17 @@ branding:
   icon: upload
   color: orange
 inputs:
-  api-token: # id of input
+  api-token:
     description: 'Your TYPO3 API Token - Use github.secrets'
     required: true
     default: ''
+  php-version:
+    description: 'The PHP version that you want to use for your action'
+    required: false
+    default: '8.3'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.api-token }}
+    - ${{ inputs.php-version }}

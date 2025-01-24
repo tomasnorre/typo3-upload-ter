@@ -1,6 +1,8 @@
 # typo3-upload-ter GitHub Action
 GitHub Action that helps you upload your Extensions to [TER](https://extensions.typo3.org).
 
+Supported PHP Version 8.1, 8.2,  8.3 and 8.4, if no parameter is given PHP 8.3 is used.
+
 ## Example usage
 
 ```yaml
@@ -21,6 +23,7 @@ jobs:
       - uses: tomasnorre/typo3-upload-ter@v2
         with:
           api-token: ${{ secrets.TYPO3_API_TOKEN }}
+          php-version: 8.3
 ```
 
 ### Requirement
