@@ -15,7 +15,8 @@ RUN apk --no-cache add php82-cli php83-cli php84-cli \
     php82-intl php83-intl php84-intl \
     php82-soap php83-soap php84-soap \
     php82-xml php83-xml php84-xml \
-    php82-zip php83-zip php84-zip
+    php82-zip php83-zip php84-zip \
+    php82-mbstring php83-mbstring php84-mbstring
 
 RUN apk update && apk upgrade && \
     apk add git jq libxml2-dev libzip-dev icu-dev curl && \
