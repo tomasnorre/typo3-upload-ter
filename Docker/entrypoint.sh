@@ -16,7 +16,6 @@ git config --global --add safe.directory $PWD
 echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
 # Prepare Tag information
-# Prepare Tag information
 TAG_WITHOUT_V=$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//');
 if [[ -z $(git tag -l --format='%(contents)' $TAG_WITHOUT_V) ]]; then
   TAG_MESSAGE=$(git log -1 --pretty=%B)
