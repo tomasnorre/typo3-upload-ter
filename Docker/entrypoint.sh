@@ -17,7 +17,11 @@ echo -e "Preparing upload of release ${GITHUB_REF#refs/tags/} to TER\n";
 
 # Prepare Tag information
 TAG_WITHOUT_V=$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//');
-TAG_MESSAGE=$(git log -1 --pretty=%B)
+if [[ -z $(git tag -l --format='%(contents)' $TAG_WITHOUT_V) ]]; then
+  TAG_MESSAGE=$(git log -1 --pretty=%B)
+else
+  TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_WITHOUT_V)
+fi
 
 echo -e "Preparing Release"
 COMPOSER_PREPARE_RELEASE=$(cat composer.json | jq '.scripts."prepare-release" // empty')
