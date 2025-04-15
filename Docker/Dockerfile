@@ -27,7 +27,7 @@ RUN docker-php-ext-install soap && \
     docker-php-ext-configure intl && docker-php-ext-install intl
 
 RUN echo -e "Install typo3/tailor" && \
-    composer global require typo3/tailor --prefer-dist --no-progress --no-suggest
+    composer global require typo3/tailor ^1.7 --prefer-dist --no-progress --no-suggest
 
 RUN ln -nfs /root/.composer/vendor/typo3/tailor/bin/tailor /usr/bin/tailor
 
