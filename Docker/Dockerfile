@@ -13,6 +13,7 @@ RUN apk --no-cache add php82-cli php83-cli php84-cli \
     php82-common php83-common php84-common \
     php82-curl php83-curl php84-curl \
     php82-intl php83-intl php84-intl \
+    php82-phar php83-phar php84-phar \
     php82-soap php83-soap php84-soap \
     php82-xml php83-xml php84-xml \
     php82-zip php83-zip php84-zip \
