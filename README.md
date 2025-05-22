@@ -1,7 +1,7 @@
 # typo3-upload-ter GitHub Action
 GitHub Action that helps you upload your Extensions to [TER](https://extensions.typo3.org).
 
-Supported PHP Version 8.1, 8.2,  8.3 and 8.4, if no parameter is given PHP 8.3 is used.
+Supported PHP Version 8.1, 8.2, 8.3 and 8.4, if no parameter is given PHP 8.3 is used.
 
 ## Example usage
 
@@ -33,7 +33,7 @@ You have to set your extension-key in `composer.json`, this is mandatory for all
 https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ExtensionArchitecture/ComposerJson/Index.html#extra
 
 **Example:**
-```json 
+```json
 "extra": {
     "typo3/cms": {
         "extension-key": "my_extensionkey",
