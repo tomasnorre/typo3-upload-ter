@@ -17,6 +17,7 @@ RUN apk --no-cache add php82-cli php83-cli php84-cli \
     php82-phar php83-phar php84-phar \
     php82-soap php83-soap php84-soap \
     php82-xml php83-xml php84-xml \
+    php82-simplexml php83-simplexml php84-simplexml \
     php82-zip php83-zip php84-zip \
     php82-mbstring php83-mbstring php84-mbstring
 
