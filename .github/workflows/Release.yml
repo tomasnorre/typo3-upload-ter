@@ -23,7 +23,7 @@ jobs:
           release_name: Release ${{ github.ref }}
 
       - name: Move v2 Tag
-        uses: richardsimko/update-tag@v1
+        uses: richardsimko/update-tag@v3
         env:
           GITHUB_TOKEN: "${{ secrets.TOMASNORRE_BOT_TOKEN }}"
         with:
