@@ -34,6 +34,12 @@ select_php_version() {
     return 1
   fi
 
+  if [[ ! -f composer.json ]]; then
+    echo "No composer.json found, using PHP $DEFAULT_PHP_VERSION" >&2
+    echo "$DEFAULT_PHP_VERSION"
+    return 0
+  fi
+
   constraint=$(jq -r '.require.php // empty' composer.json)
   if [[ -z "$constraint" ]]; then
     echo "composer.json requires no PHP version, using PHP $DEFAULT_PHP_VERSION" >&2

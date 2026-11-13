@@ -144,6 +144,15 @@ else
   fail "unreadable require.php: warning and PHP 8.5" "$output"
 fi
 
+dir=$(prepare_repository no-composer-json "")
+rm "$dir/composer.json"
+output=$(run_entrypoint "$dir" "")
+if [[ "$output" == *"No composer.json found, using PHP 8.5"* && "$output" != *"Could not open file"* ]]; then
+  pass "no composer.json: PHP 8.5 without a jq error"
+else
+  fail "no composer.json: PHP 8.5 without a jq error" "$output"
+fi
+
 for removed in 8.1 8.2; do
   dir=$(prepare_repository "removed-$removed" "~8.3.0")
   output=$(run_entrypoint "$dir" "$removed")
