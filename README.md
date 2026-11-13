@@ -1,7 +1,11 @@
 # typo3-upload-ter GitHub Action
 GitHub Action that helps you upload your Extensions to [TER](https://extensions.typo3.org).
 
-Supported PHP Version 8.2, 8.3 and 8.4, if no parameter is given PHP 8.3 is used.
+TYPO3 Tailor always runs on PHP 8.5.
+
+The `php-version` input selects the PHP version for the `prepare-release` script in your `composer.json`. Supported values are 8.3, 8.4, 8.5 and `auto`. With `auto`, the default, the action uses the highest of these versions that satisfies `require.php` in your `composer.json`. If `composer.json` requires no PHP version, or no installed version satisfies it, PHP 8.5 is used.
+
+The PHP version matters only if `prepare-release` runs PHP code, for example `composer install` or a PHP callback. A script that only removes files works with every version.
 
 ## Example usage
 
@@ -23,7 +27,8 @@ jobs:
       - uses: tomasnorre/typo3-upload-ter@v3
         with:
           api-token: ${{ secrets.TYPO3_API_TOKEN }}
-          php-version: 8.3
+          # Optional, defaults to auto
+          php-version: auto
 ```
 
 ### Requirement

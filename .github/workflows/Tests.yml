@@ -1,0 +1,21 @@
+name: "Tests"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  tests:
+    name: "Docker image"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Docker Build
+        run: docker build -t typo3teruploader:test Docker/
+
+      - name: Run tests
+        run: tests/run-tests.sh typo3teruploader:test

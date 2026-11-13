@@ -1,13 +1,54 @@
 #!/usr/bin/env bash
 
-# Check if an argument is provided (e.g., 8.3)
-if [[ -z "$2" ]]; then
-  echo "Keeping default: PHP 8.3"
-  ln -sf /usr/bin/php83 /usr/local/bin/php
-else
-  PHP=$(echo "$2" | tr -d '.')
-  ln -sf /usr/bin/php"$PHP" /usr/local/bin/php
-fi
+# PHP versions installed in the image, highest first.
+SUPPORTED_PHP_VERSIONS="8.5 8.4 8.3"
+DEFAULT_PHP_VERSION="8.5"
+
+php_binary() {
+  echo "/usr/bin/php${1//./}"
+}
+
+# Prints the PHP version for prepare-release. Tailor always runs on PHP 8.5.
+# $1: the php-version input; empty or "auto" reads require.php from composer.json.
+select_php_version() {
+  local requested="$1" constraint version full
+  local candidates=()
+
+  if [[ -n "$requested" && "$requested" != "auto" ]]; then
+    for version in $SUPPORTED_PHP_VERSIONS; do
+      if [[ "$requested" == "$version" ]]; then
+        echo "$version"
+        return 0
+      fi
+    done
+    echo "::error::PHP $requested is not available. Use one of: $SUPPORTED_PHP_VERSIONS, or auto." >&2
+    return 1
+  fi
+
+  constraint=$(jq -r '.require.php // empty' composer.json)
+  if [[ -z "$constraint" ]]; then
+    echo "composer.json requires no PHP version, using PHP $DEFAULT_PHP_VERSION" >&2
+    echo "$DEFAULT_PHP_VERSION"
+    return 0
+  fi
+
+  for version in $SUPPORTED_PHP_VERSIONS; do
+    candidates+=("$("$(php_binary "$version")" -r 'echo PHP_VERSION;')")
+  done
+  if full=$(/usr/bin/php85 /usr/local/lib/ter-uploader/select-php-version.php "$constraint" "${candidates[@]}"); then
+    version="${full%.*}"
+    echo "composer.json requires PHP $constraint, using PHP $version ($full)" >&2
+    echo "$version"
+    return 0
+  fi
+
+  echo "::warning::No installed PHP version ($SUPPORTED_PHP_VERSIONS) satisfies \"$constraint\" from composer.json, using PHP $DEFAULT_PHP_VERSION" >&2
+  echo "$DEFAULT_PHP_VERSION"
+}
+
+PHP_VERSION=$(select_php_version "$2") || exit 1
+echo "Using PHP $PHP_VERSION for prepare-release"
+ln -sf "$(php_binary "$PHP_VERSION")" /usr/local/bin/php
 
 echo -e "Preparing git configuration (safe.directory)\n";
 
