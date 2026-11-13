@@ -136,13 +136,31 @@ else
   fail "no installed PHP satisfies require.php: warning and PHP 8.5" "$output"
 fi
 
-dir=$(prepare_repository unsupported-input "^8.2")
-output=$(run_entrypoint "$dir" "8.2")
-status=$?
-if [[ $status -ne 0 && "$output" == *"::error::PHP 8.2 is not available"* && ! -e "$dir/tailor-args.txt" ]]; then
-  pass "php-version 8.2: error, nothing is published"
+dir=$(prepare_repository invalid-constraint "not a constraint")
+output=$(run_entrypoint "$dir" "")
+if [[ "$output" == *"::warning::Could not read the PHP constraint"* && "$output" == *"Using PHP 8.5 for prepare-release"* ]]; then
+  pass "unreadable require.php: warning and PHP 8.5"
 else
-  fail "php-version 8.2: error, nothing is published (exit $status)" "$output"
+  fail "unreadable require.php: warning and PHP 8.5" "$output"
+fi
+
+for removed in 8.1 8.2; do
+  dir=$(prepare_repository "removed-$removed" "~8.3.0")
+  output=$(run_entrypoint "$dir" "$removed")
+  if [[ "$(cat "$dir/prepare-release-php.txt" 2>/dev/null)" == "8.3" && "$output" == *"::warning::PHP $removed is no longer available"* && -f "$dir/tailor-args.txt" ]]; then
+    pass "php-version $removed: warning, then auto"
+  else
+    fail "php-version $removed: warning, then auto" "$output"
+  fi
+done
+
+dir=$(prepare_repository unsupported-input "^8.2")
+output=$(run_entrypoint "$dir" "7.4")
+status=$?
+if [[ $status -ne 0 && "$output" == *"::error::PHP 7.4 is not available"* && ! -e "$dir/tailor-args.txt" ]]; then
+  pass "php-version 7.4: error, nothing is published"
+else
+  fail "php-version 7.4: error, nothing is published (exit $status)" "$output"
 fi
 
 dir=$(prepare_repository publish-arguments "^8.2")
@@ -153,6 +171,31 @@ if [[ "$actual" == "$expected" ]]; then
   pass "tailor ter:publish receives the tag message and the version"
 else
   fail "tailor ter:publish receives the tag message and the version (got '$actual')" "$output"
+fi
+
+# --- Entrypoint with the real tailor against a fake TER ---------------------
+
+dir=$(prepare_repository fake-ter "^8.2")
+cp "$TESTS_DIR/fixtures/fake-ter.php" "$WORK_DIR/fake-ter.php"
+# GitHub Actions mounts HOME=/github/home into the container; the test creates it.
+output=$(docker run --rm \
+  -v "$dir:/github/workspace" -w /github/workspace \
+  -v "$WORK_DIR/fake-ter.php:/fake-ter/router.php:ro" \
+  -e GITHUB_REF=refs/tags/v1.2.3 -e HOME=/github/home \
+  -e TYPO3_REMOTE_BASE_URI=http://127.0.0.1:8080/ \
+  --entrypoint bash "$IMAGE" \
+  -c 'mkdir -p "$HOME" && php85 -S 127.0.0.1:8080 -t /github/workspace /fake-ter/router.php >/dev/null 2>&1 & sleep 1; /entrypoint.sh test-token auto' 2>&1)
+status=$?
+request=$(cat "$dir/fake-ter-request.json" 2>/dev/null)
+if [[ $status -eq 0 ]] \
+  && [[ "$(jq -r '.method + " " + .uri' <<< "$request")" == "POST /api/v1/extension/test_extension/1.2.3" ]] \
+  && [[ "$(jq -r '.authorization' <<< "$request")" == "Bearer test-token" ]] \
+  && [[ "$(jq -r '.description' <<< "$request")" == "Release 1.2.3" ]] \
+  && [[ "$(jq -r '.sha256Matches' <<< "$request")" == "true" ]]; then
+  pass "tailor ter:publish uploads the archive with token, version and tag message"
+else
+  fail "tailor ter:publish uploads the archive with token, version and tag message (exit $status)" "$output
+$request"
 fi
 
 echo

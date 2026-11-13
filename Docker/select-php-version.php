@@ -4,7 +4,7 @@
  * Prints the first candidate version that satisfies a Composer constraint.
  *
  * Usage: php select-php-version.php <constraint> <version> [<version> ...]
- * Exit code 1 when no candidate satisfies the constraint.
+ * Exit code 1 when no candidate satisfies the constraint, 3 when the constraint is invalid.
  */
 
 require '/opt/tailor/vendor/autoload.php';

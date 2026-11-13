@@ -3,6 +3,8 @@
 # PHP versions installed in the image, highest first.
 SUPPORTED_PHP_VERSIONS="8.5 8.4 8.3"
 DEFAULT_PHP_VERSION="8.5"
+# Versions of earlier releases of the image. They fall back to auto with a warning.
+REMOVED_PHP_VERSIONS="8.1 8.2"
 
 php_binary() {
   echo "/usr/bin/php${1//./}"
@@ -11,8 +13,15 @@ php_binary() {
 # Prints the PHP version for prepare-release. Tailor always runs on PHP 8.5.
 # $1: the php-version input; empty or "auto" reads require.php from composer.json.
 select_php_version() {
-  local requested="$1" constraint version full
+  local requested="$1" constraint version full status
   local candidates=()
+
+  for version in $REMOVED_PHP_VERSIONS; do
+    if [[ "$requested" == "$version" ]]; then
+      echo "::warning::PHP $requested is no longer available, selecting the PHP version from composer.json instead (php-version: auto)." >&2
+      requested="auto"
+    fi
+  done
 
   if [[ -n "$requested" && "$requested" != "auto" ]]; then
     for version in $SUPPORTED_PHP_VERSIONS; do
@@ -35,14 +44,20 @@ select_php_version() {
   for version in $SUPPORTED_PHP_VERSIONS; do
     candidates+=("$("$(php_binary "$version")" -r 'echo PHP_VERSION;')")
   done
-  if full=$(/usr/bin/php85 /usr/local/lib/ter-uploader/select-php-version.php "$constraint" "${candidates[@]}"); then
+  full=$(/usr/bin/php85 /usr/local/lib/ter-uploader/select-php-version.php "$constraint" "${candidates[@]}")
+  status=$?
+  if [[ $status -eq 0 ]]; then
     version="${full%.*}"
     echo "composer.json requires PHP $constraint, using PHP $version ($full)" >&2
     echo "$version"
     return 0
   fi
 
-  echo "::warning::No installed PHP version ($SUPPORTED_PHP_VERSIONS) satisfies \"$constraint\" from composer.json, using PHP $DEFAULT_PHP_VERSION" >&2
+  if [[ $status -eq 1 ]]; then
+    echo "::warning::No installed PHP version ($SUPPORTED_PHP_VERSIONS) satisfies \"$constraint\" from composer.json, using PHP $DEFAULT_PHP_VERSION" >&2
+  else
+    echo "::warning::Could not read the PHP constraint \"$constraint\" from composer.json, using PHP $DEFAULT_PHP_VERSION" >&2
+  fi
   echo "$DEFAULT_PHP_VERSION"
 }
 

@@ -3,9 +3,9 @@ GitHub Action that helps you upload your Extensions to [TER](https://extensions.
 
 TYPO3 Tailor always runs on PHP 8.5.
 
-The `php-version` input selects the PHP version for the `prepare-release` script in your `composer.json`. Supported values are 8.3, 8.4, 8.5 and `auto`. With `auto`, the default, the action uses the highest of these versions that satisfies `require.php` in your `composer.json`. If `composer.json` requires no PHP version, or no installed version satisfies it, PHP 8.5 is used.
+The `php-version` input selects the PHP version for the `prepare-release` script in your `composer.json`. Supported values are 8.3, 8.4, 8.5 and `auto`. With `auto`, the default, the action uses the highest of these versions that satisfies `require.php` in your `composer.json`. If `composer.json` requires no PHP version, or no installed version satisfies it, PHP 8.5 is used. The values 8.1 and 8.2 of earlier releases work like `auto` and print a warning.
 
-The PHP version matters only if `prepare-release` runs PHP code, for example `composer install` or a PHP callback. A script that only removes files works with every version.
+The PHP version matters only if `prepare-release` runs PHP code, for example a PHP callback or a PHP script. A script that only removes files works with every version.
 
 ## Example usage
 
