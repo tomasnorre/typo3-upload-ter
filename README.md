@@ -5,7 +5,7 @@ TYPO3 Tailor always runs on PHP 8.5.
 
 The `php-version` input selects the PHP version for the `prepare-release` script in your `composer.json`. Supported values are 8.3, 8.4, 8.5 and `auto`. With `auto`, the default, the action uses the highest of these versions that satisfies `require.php` in your `composer.json`. If `composer.json` requires no PHP version, or no installed version satisfies it, the action uses PHP 8.5. The values 8.1 and 8.2 of earlier releases work like `auto` and print a warning.
 
-The PHP version matters only if `prepare-release` runs PHP code, for example a PHP callback or a PHP script.
+The PHP version matters only if `prepare-release` runs PHP code, for example a PHP script or a Composer command.
 
 ## Example usage
 

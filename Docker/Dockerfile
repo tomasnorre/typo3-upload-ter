@@ -17,8 +17,7 @@ RUN apk add --no-cache bash curl git jq \
     php83-zip php84-zip php85-zip
 
 # select-php-version.php uses composer/semver for php-version: auto.
-RUN echo "Install typo3/tailor" && \
-    COMPOSER_HOME=/opt/tailor /usr/bin/php85 /usr/bin/composer global require \
+RUN COMPOSER_HOME=/opt/tailor /usr/bin/php85 /usr/bin/composer global require \
       typo3/tailor:^2.1 composer/semver:^3.4 --prefer-dist --no-progress
 
 COPY tailor /usr/local/bin/tailor

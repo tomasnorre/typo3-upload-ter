@@ -58,7 +58,7 @@ new_repository() {
   if [[ -n "$2" ]]; then
     jq --arg c "$2" '.require.php = $c' "$TESTS_DIR/fixtures/extension/composer.json" > "$dir/composer.json"
   fi
-  # No signing, so that the git configuration of the host cannot change the tag message.
+  # Do not sign. A signature from the git configuration of the host adds lines to the tag message.
   local git=(git -C "$dir" -c user.name=Test -c user.email=test@example.org -c commit.gpgSign=false -c tag.gpgSign=false)
   "${git[@]}" init -q
   "${git[@]}" add -A
@@ -93,16 +93,16 @@ while read -r constraint input expected; do
   output=$(run_entrypoint "$dir" "$input")
   check "require.php '$constraint', php-version '$input': PHP $expected" test "$(prepare_release_php "$dir")" = "$expected"
 done <<'CASES'
--         -     8.5
-^8.2      -     8.5
-~8.3.0    -     8.3
->=8.3,<8.5 -     8.4
-~8.4.0    auto  8.4
-^8.2      8.3   8.3
-~8.3.0    8.4   8.4
-~8.3.0    8.1   8.3
-~8.3.0    8.2   8.3
-~8.2.0    -     8.5
+-           -     8.5
+^8.2        -     8.5
+~8.3.0      -     8.3
+>=8.3,<8.5  -     8.4
+~8.4.0      auto  8.4
+^8.2        8.3   8.3
+~8.3.0      8.4   8.4
+~8.3.0      8.1   8.3
+~8.3.0      8.2   8.3
+~8.2.0      -     8.5
 CASES
 
 dir=$(new_repository removed-version "~8.3.0")
@@ -115,9 +115,14 @@ check "require.php that no PHP satisfies prints a warning" contains "$output" ":
 
 dir=$(new_repository invalid-constraint "not a constraint")
 output=$(run_entrypoint "$dir" "")
-check "require.php that cannot be parsed prints a warning" contains "$output" "::warning::No installed PHP version"
+check "require.php that is not valid prints a warning" contains "$output" "::warning::No installed PHP version"
 # Composer itself stops prepare-release here, so the test reads the log.
-check "require.php that cannot be parsed: PHP 8.5" contains "$output" "Using PHP 8.5 for prepare-release"
+check "require.php that is not valid: PHP 8.5" contains "$output" "prepare-release uses PHP 8.5."
+
+dir=$(new_repository no-composer-json "")
+rm "$dir/composer.json"
+output=$(run_entrypoint "$dir" "")
+check "no composer.json: PHP 8.5 without a warning" contains "$output" "require.php in composer.json: none. The highest installed PHP that satisfies it is 8.5"
 
 dir=$(new_repository unsupported-input "^8.2")
 output=$(run_entrypoint "$dir" 7.4)
@@ -134,7 +139,7 @@ check "tailor gets the tag message and the version" \
 # --- Entrypoint with the real tailor and a fake TER -------------------------
 
 # tests/fixtures/fake-ter.php answers like TER and writes the request to fake-ter-request.json.
-# GitHub Actions mounts HOME=/github/home into the container, so the test creates it.
+# GitHub Actions sets HOME=/github/home and mounts that directory. The test sets HOME and creates the directory.
 dir=$(new_repository fake-ter "^8.2")
 cp "$TESTS_DIR/fixtures/fake-ter.php" "$WORK_DIR/fake-ter.php"
 output=$(docker run --rm \
