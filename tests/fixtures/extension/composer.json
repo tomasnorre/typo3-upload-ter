@@ -1,0 +1,20 @@
+{
+    "name": "test/test-extension",
+    "description": "Test Extension - Fixture for the tests of the action",
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0-or-later",
+    "version": "1.2.3",
+    "require": {
+        "typo3/cms-core": "^14.3"
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "test_extension"
+        }
+    },
+    "scripts": {
+        "prepare-release": [
+            "php -r \"file_put_contents('prepare-release-php.txt', PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION);\""
+        ]
+    }
+}

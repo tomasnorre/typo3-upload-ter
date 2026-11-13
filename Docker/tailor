@@ -1,0 +1,3 @@
+#!/bin/sh
+# Tailor always runs on PHP 8.5. /usr/local/bin/php is the PHP for prepare-release.
+exec /usr/bin/php85 /opt/tailor/vendor/bin/tailor "$@"

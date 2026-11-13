@@ -1,13 +1,31 @@
 #!/usr/bin/env bash
 
-# Check if an argument is provided (e.g., 8.3)
-if [[ -z "$2" ]]; then
-  echo "Keeping default: PHP 8.3"
-  ln -sf /usr/bin/php83 /usr/local/bin/php
-else
-  PHP=$(echo "$2" | tr -d '.')
-  ln -sf /usr/bin/php"$PHP" /usr/local/bin/php
-fi
+# Prints the PHP version for prepare-release. Tailor always runs on PHP 8.5.
+select_php_version() {
+  local constraint full
+  case "$1" in
+    8.3|8.4|8.5) echo "$1"; return ;;
+    ""|auto) ;;
+    8.1|8.2) echo "::warning::PHP $1 is no longer available. The action uses php-version: auto." >&2 ;;
+    *) echo "::error::PHP $1 is not available. Use 8.3, 8.4, 8.5 or auto." >&2; return 1 ;;
+  esac
+
+  # Empty, auto, 8.1 and 8.2: select the PHP version from require.php in composer.json.
+  # The full versions let a constraint such as >=8.4.3 compare with the installed 8.4.x.
+  constraint=$(jq -r '.require.php // empty' composer.json 2>/dev/null)
+  if full=$(php85 /usr/local/lib/ter-uploader/select-php-version.php "${constraint:-*}" \
+      "$(php85 -r 'echo PHP_VERSION;')" "$(php84 -r 'echo PHP_VERSION;')" "$(php83 -r 'echo PHP_VERSION;')"); then
+    echo "require.php in composer.json: ${constraint:-none}. The highest installed PHP that satisfies it is $full." >&2
+    echo "${full%.*}"
+  else
+    echo "::warning::No installed PHP version (8.3, 8.4, 8.5) satisfies require.php \"$constraint\" in composer.json. The action uses PHP 8.5." >&2
+    echo 8.5
+  fi
+}
+
+PHP_VERSION=$(select_php_version "$2") || exit 1
+echo "prepare-release uses PHP $PHP_VERSION."
+ln -sf "/usr/bin/php${PHP_VERSION//./}" /usr/local/bin/php
 
 echo -e "Preparing git configuration (safe.directory)\n";
 
