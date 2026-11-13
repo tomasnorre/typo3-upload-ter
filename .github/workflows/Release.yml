@@ -22,12 +22,12 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
 
-      - name: Move v2 Tag
+      - name: Move v3 Tag
         uses: richardsimko/update-tag@v3
         env:
           GITHUB_TOKEN: "${{ secrets.TOMASNORRE_BOT_TOKEN }}"
         with:
-          tag_name: v2
+          tag_name: v3
 
       # Make New Release to Docker Hub
       - name: Docker Login
