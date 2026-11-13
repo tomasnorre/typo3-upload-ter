@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Stands in for the TER REST API in the tests (router for `php -S`).
+ * Replaces the TER REST API in the tests (router for `php -S`).
  * Records the request in fake-ter-request.json and answers like a successful upload.
  */
 

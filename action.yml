@@ -9,7 +9,7 @@ inputs:
     required: true
     default: ''
   php-version:
-    description: 'The PHP version for the prepare-release script: 8.3, 8.4, 8.5, or auto (the highest version that satisfies require.php in composer.json). It matters only if prepare-release runs PHP code. Tailor itself always runs on PHP 8.5.'
+    description: 'PHP for the prepare-release script: 8.3, 8.4, 8.5 or auto (from require.php in composer.json). Tailor always runs on PHP 8.5.'
     required: false
     default: 'auto'
 runs:

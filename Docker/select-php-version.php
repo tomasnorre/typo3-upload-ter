@@ -1,33 +1,18 @@
 <?php
 
-/*
- * Prints the first candidate version that satisfies a Composer constraint.
- *
- * Usage: php select-php-version.php <constraint> <version> [<version> ...]
- * Exit code 1 when no candidate satisfies the constraint, 3 when the constraint is invalid.
- */
+// Prints the first version (arguments 2 to n) that satisfies the Composer constraint (argument 1).
+// Exits with 1 if no version satisfies the constraint or if the constraint is not valid.
 
 require '/opt/tailor/vendor/autoload.php';
 
-use Composer\Semver\Semver;
-
-if ($argc < 3) {
-    fwrite(STDERR, "Usage: select-php-version.php <constraint> <version> [<version> ...]\n");
-    exit(2);
-}
-
-$constraint = $argv[1];
 foreach (array_slice($argv, 2) as $version) {
     try {
-        $satisfied = Semver::satisfies($version, $constraint);
-    } catch (\UnexpectedValueException $e) {
-        fwrite(STDERR, $e->getMessage() . "\n");
-        exit(3);
-    }
-    if ($satisfied) {
-        echo $version;
-        exit(0);
+        if (Composer\Semver\Semver::satisfies($version, $argv[1])) {
+            echo $version;
+            exit(0);
+        }
+    } catch (UnexpectedValueException $e) {
+        exit(1);
     }
 }
-
 exit(1);

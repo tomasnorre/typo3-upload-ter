@@ -1,25 +1,27 @@
 FROM composer:2 AS composer
 
-# Alpine 3.24 ships PHP 8.3, 8.4 and 8.5 as packages. No Alpine release
-# ships PHP 8.2 and 8.5 together.
 FROM alpine:3.24
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN for v in 83 84 85; do \
-      set -- "$@" php$v php$v-curl php$v-intl php$v-mbstring php$v-openssl php$v-phar \
-        php$v-simplexml php$v-soap php$v-xml php$v-zip; \
-    done && \
-    apk add --no-cache bash curl git jq "$@"
+RUN apk add --no-cache bash curl git jq \
+    php83 php84 php85 \
+    php83-curl php84-curl php85-curl \
+    php83-intl php84-intl php85-intl \
+    php83-mbstring php84-mbstring php85-mbstring \
+    php83-openssl php84-openssl php85-openssl \
+    php83-phar php84-phar php85-phar \
+    php83-simplexml php84-simplexml php85-simplexml \
+    php83-soap php84-soap php85-soap \
+    php83-xml php84-xml php85-xml \
+    php83-zip php84-zip php85-zip
 
-# Tailor always runs on PHP 8.5, whatever version prepare-release uses.
-# composer/semver is used by select-php-version.php to resolve "auto".
+# select-php-version.php uses composer/semver for php-version: auto.
 RUN echo "Install typo3/tailor" && \
     COMPOSER_HOME=/opt/tailor /usr/bin/php85 /usr/bin/composer global require \
-      typo3/tailor:^2.1 composer/semver:^3.4 --prefer-dist --no-progress && \
-    printf '#!/bin/sh\nexec /usr/bin/php85 /opt/tailor/vendor/bin/tailor "$@"\n' > /usr/local/bin/tailor && \
-    chmod +x /usr/local/bin/tailor
+      typo3/tailor:^2.1 composer/semver:^3.4 --prefer-dist --no-progress
 
+COPY tailor /usr/local/bin/tailor
 COPY select-php-version.php /usr/local/lib/ter-uploader/select-php-version.php
 COPY entrypoint.sh /entrypoint.sh
 
