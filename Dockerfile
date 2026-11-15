@@ -1,1 +1,1 @@
-FROM tomasnorre/typo3teruploader:latest
+FROM tomasnorre/typo3teruploader:4

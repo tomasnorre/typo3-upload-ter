@@ -1,7 +1,7 @@
 # typo3-upload-ter GitHub Action
 GitHub Action that helps you upload your Extensions to [TER](https://extensions.typo3.org).
 
-Supported PHP Version 8.2, 8.3 and 8.4, if no parameter is given PHP 8.3 is used.
+The action runs TYPO3 Tailor on PHP 8.5 and uploads the files in the workspace.
 
 ## Example usage
 
@@ -20,11 +20,17 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v7
-      - uses: tomasnorre/typo3-upload-ter@v3
+      - uses: tomasnorre/typo3-upload-ter@v4
         with:
           api-token: ${{ secrets.TYPO3_API_TOKEN }}
-          php-version: 8.3
 ```
+
+### Upgrading from v3
+
+v4 changes two things:
+
+- The action no longer runs `composer prepare-release`. If your `composer.json` has this script, add it as a step before the action, as in the [Recommendation](#recommendation) below.
+- v4 has no `php-version` input. Tailor always runs on PHP 8.5. Remove the input from your workflow.
 
 ### Requirement
 
@@ -47,11 +53,21 @@ The changelog message will be the message of your annotated tag, otherwise the c
 
 ### Recommendation
 
-It's recommended to add a `prepare-release` to your composer.json `script`-section, if this exists it will run before zipping and uploading.
+To remove files before the upload, run a script in a step before the action, with the PHP version that your extension needs. The step must be in the same job as the action, because a second job gets a new checkout.
 
-This can be helpful to ensure that some files are removed before uploading.
+```yaml
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - run: composer prepare-release
+      - uses: tomasnorre/typo3-upload-ter@v4
+        with:
+          api-token: ${{ secrets.TYPO3_API_TOKEN }}
+```
 
-**Example:**
+**Example of a `prepare-release` script in `composer.json`:**
 ```json
 "scripts": {
     "prepare-release": [
